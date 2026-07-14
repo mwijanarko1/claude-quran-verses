@@ -1,0 +1,42 @@
+{
+  "name": "claude-quran-verses",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Show complete-sentence Quran verses in Claude Code (and Cursor CLI) status lines while you work.",
+  "license": "MIT",
+  "author": {
+    "name": "mwijanarko1",
+    "url": "https://github.com/mwijanarko1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mwijanarko1/claude-quran-verses.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mwijanarko1/claude-quran-verses/issues"
+  },
+  "homepage": "https://github.com/mwijanarko1/claude-quran-verses#readme",
+  "keywords": [
+    "claude-code",
+    "cursor",
+    "codex",
+    "quran",
+    "statusline"
+  ],
+  "bin": {
+    "claude-quran-verses": "./bin/install.mjs",
+    "quran-verse": "./bin/quran-verse.mjs"
+  },
+  "files": [
+    "bin",
+    "data/editions.json",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
