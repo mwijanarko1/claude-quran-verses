@@ -39,10 +39,11 @@ function writeJson(path, data) {
 // --- Claude Code (primary) ---
 const claudeSettings = join(home, ".claude/settings.json");
 const claude = readJson(claudeSettings, {});
-// Event-driven only (like pi-quran-verses turn_start): no refreshInterval timer.
+// Refresh every 10s so the verse rotates on a countdown, not only on activity.
 claude.statusLine = {
   type: "command",
   command: cmd,
+  refreshInterval: 10,
 };
 writeJson(claudeSettings, claude);
 console.log(`Claude Code  statusLine → ${claudeSettings}`);

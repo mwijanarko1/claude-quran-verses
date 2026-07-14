@@ -16,7 +16,7 @@ Example status line text:
 Quran 1:2 — [All] praise is [due] to Allāh, Lord of the worlds.
 ```
 
-A new verse is chosen on status-line updates (event-driven, not a fixed timer).
+A new verse is chosen about every 10 seconds (`refreshInterval: 10`).
 
 ## Requirements
 
@@ -52,7 +52,7 @@ Then **restart** Claude Code / Cursor Agent / Codex so the status line reloads.
 
 | Agent | Config written |
 |---|---|
-| Claude Code | `~/.claude/settings.json` → `statusLine` (event-driven) |
+| Claude Code | `~/.claude/settings.json` → `statusLine` (every 10s) |
 | Cursor CLI | `~/.cursor/cli-config.json` → `statusLine` (event-driven) |
 | Codex | `~/.codex/config.toml` → `[tui].status_line` if not already set |
 
@@ -127,7 +127,7 @@ echo '{}' | node bin/statusline.mjs
 
 1. Bundled verse pools live in `data/editions.json` (curated complete-sentence refs).
 2. `bin/statusline.mjs` is registered as the agent status-line command.
-3. On each status-line refresh, the script prints one random verse for the active edition.
+3. Claude re-runs the status-line command about every 10 seconds and prints one random verse for the active edition.
 4. No network calls at runtime.
 
 For Claude Code and Cursor CLI this is **UI-only**: verses are not injected into the model context.
