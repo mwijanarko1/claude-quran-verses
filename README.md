@@ -1,5 +1,7 @@
 # claude-quran-verses
 
+![Claude Code status line showing Quran verses](docs/demo-statusline.gif)
+
 Show a complete-sentence Quran verse in your coding-agent status line while you work.
 
 **Primary:** [Claude Code](https://code.claude.com)  

@@ -1,6 +1,6 @@
 {
   "name": "claude-quran-verses",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "type": "module",
   "description": "Show complete-sentence Quran verses in Claude Code (and Cursor CLI) status lines while you work.",
   "license": "MIT",
@@ -31,7 +31,8 @@
     "bin",
     "data/editions.json",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "docs/demo-statusline.gif"
   ],
   "engines": {
     "node": ">=18"
