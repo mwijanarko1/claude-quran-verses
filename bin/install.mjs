@@ -51,11 +51,13 @@ console.log(`Claude Code  statusLine → ${claudeSettings}`);
 // --- Cursor CLI ---
 const cursorConfig = join(home, ".cursor/cli-config.json");
 const cursor = readJson(cursorConfig, {});
-// Event-driven: Cursor re-runs on conversation updates (no forced timer).
+// Timer-aligned with Claude: refreshInterval (Claude-compat) + updateIntervalMs (Cursor debounce floor).
 cursor.statusLine = {
   type: "command",
   command: cmd,
   timeoutMs: 2000,
+  refreshInterval: 10,
+  updateIntervalMs: 10000,
 };
 writeJson(cursorConfig, cursor);
 console.log(`Cursor CLI   statusLine → ${cursorConfig}`);

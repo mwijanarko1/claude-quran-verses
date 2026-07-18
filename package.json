@@ -1,6 +1,6 @@
 {
   "name": "claude-quran-verses",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "type": "module",
   "description": "Show complete-sentence Quran verses in Claude Code (and Cursor CLI) status lines while you work.",
   "license": "MIT",

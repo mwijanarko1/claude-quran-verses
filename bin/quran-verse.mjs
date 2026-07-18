@@ -16,6 +16,8 @@ const packageDir = join(dirname(fileURLToPath(import.meta.url)), "..");
 const catalogPath = join(packageDir, "data/editions.json");
 const settingsPath = join(homedir(), ".claude-quran-verses.json");
 const lastPath = join(homedir(), ".claude-quran-verses.last");
+/** Hold the same verse this long so hosts that poll/event-fire don't thrash. */
+const ROTATE_MS = Number(process.env.QURAN_VERSE_ROTATE_MS || 10_000);
 
 const catalog = JSON.parse(readFileSync(catalogPath, "utf8"));
 
@@ -80,15 +82,31 @@ if (edIdx !== -1 && args[edIdx + 1]) editionId = args[edIdx + 1];
 
 const edition = getEdition(editionId);
 let previous = "";
+let previousAt = 0;
 try {
-  if (existsSync(lastPath)) previous = readFileSync(lastPath, "utf8").trim();
+  if (existsSync(lastPath)) {
+    const raw = readFileSync(lastPath, "utf8").trim();
+    // format: "<verse>\n@<epochMs>" or legacy plain verse
+    const at = raw.lastIndexOf("\n@");
+    if (at !== -1 && /^\d+$/.test(raw.slice(at + 2))) {
+      previous = raw.slice(0, at).trim();
+      previousAt = Number(raw.slice(at + 2));
+    } else {
+      previous = raw;
+    }
+  }
 } catch {
   // ignore
 }
-const verse = pickVerse(edition, previous);
-try {
-  writeFileSync(lastPath, verse + "\n");
-} catch {
-  // ignore
+
+const now = Date.now();
+let verse = previous;
+if (!verse || !previousAt || now - previousAt >= ROTATE_MS) {
+  verse = pickVerse(edition, previous);
+  try {
+    writeFileSync(lastPath, `${verse}\n@${now}\n`);
+  } catch {
+    // ignore
+  }
 }
 process.stdout.write(verse + "\n");

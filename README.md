@@ -18,7 +18,7 @@ Example status line text:
 Quran 1:2 — [All] praise is [due] to Allāh, Lord of the worlds.
 ```
 
-A new verse is chosen about every 10 seconds (`refreshInterval: 10`).
+A new verse is chosen about every 10 seconds. Claude Code polls on a timer; Cursor CLI debounces updates to the same interval. The verse picker itself also holds each verse for 10s (`QURAN_VERSE_ROTATE_MS`) so hosts that fire more often do not thrash.
 
 ## Requirements
 
@@ -54,8 +54,8 @@ Then **restart** Claude Code / Cursor Agent / Codex so the status line reloads.
 
 | Agent | Config written |
 |---|---|
-| Claude Code | `~/.claude/settings.json` → `statusLine` (every 10s) |
-| Cursor CLI | `~/.cursor/cli-config.json` → `statusLine` (event-driven) |
+| Claude Code | `~/.claude/settings.json` → `statusLine` (`refreshInterval: 10`) |
+| Cursor CLI | `~/.cursor/cli-config.json` → `statusLine` (`updateIntervalMs: 10000`, `refreshInterval: 10`) |
 | Codex | `~/.codex/config.toml` → `[tui].status_line` if not already set |
 
 Existing settings keys are preserved; only `statusLine` / Codex `status_line` is added or updated.
@@ -129,8 +129,11 @@ echo '{}' | node bin/statusline.mjs
 
 1. Bundled verse pools live in `data/editions.json` (curated complete-sentence refs).
 2. `bin/statusline.mjs` is registered as the agent status-line command.
-3. Claude re-runs the status-line command about every 10 seconds and prints one random verse for the active edition.
-4. No network calls at runtime.
+3. Hosts re-run the status-line command on a ~10s cadence:
+   - Claude Code: `refreshInterval: 10`
+   - Cursor CLI: `updateIntervalMs: 10000` (plus `refreshInterval: 10` for Claude-compatible configs)
+4. `bin/quran-verse.mjs` keeps the same verse for 10s (override with `QURAN_VERSE_ROTATE_MS`) so rapid re-invocations do not spin verses.
+5. No network calls at runtime.
 
 For Claude Code and Cursor CLI this is **UI-only**: verses are not injected into the model context.
 
